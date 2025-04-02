@@ -1,9 +1,16 @@
 import struct
 import numpy as np
- 
-#"""左循环位移，模拟SHA-1中的左循环位移操作"""
+
+# import hashlib 
+
+# def sha1_hash32(data):
+#     data = bytearray(data, 'utf-8')
+#     return struct.unpack('<I', hashlib.sha1(data).digest()[:4])[0]
+
+# 
+# """左循环位移，模拟SHA-1中的左循环位移操作"""
 def left_rotate(n, b):
-    return ((n << b) & 0xFFFFFFFFFFFFFFFF) | (n >> (64 - b))
+    return ((n << b) | (n >> (32 - b))) & 0xFFFFFFFF  # 使用32位掩码
 
 # 默认的哈希函数
 # 32位的SHA1哈希函数 
@@ -61,7 +68,7 @@ def sha1_hash32(data):
                 f = b ^ c ^ d
                 k = 0xCA62C1D6
             
-            temp = left_rotate(a, 5) + f + e + k + w[t] & 0xFFFFFFFF
+            temp = (left_rotate(a, 5) + f + e + k + w[t]) & 0xFFFFFFFF
             e = d
             d = c
             c = left_rotate(b, 30)
@@ -102,7 +109,7 @@ class MinHash(object):
 
         self.seed = seed
     
-        # Initialize hash values
+        # 初始化
         if hashvalues is not None: # 如果提供了hashvalues，则使用它们来初始化哈希签名
             d = len(hashvalues) # 更新d的值
             self.hashvalues = self._parse_hashvalues(hashvalues) # 解析hashvalues
@@ -119,29 +126,43 @@ class MinHash(object):
         
         if len(self) != len(self.permutations[0]):
             raise ValueError("Numbers of hash values and permutations mismatch")
- 
+    
+    # 初始化哈希值
+    # @param d: 哈希值的数量
     def _init_hashvalues(self, d):
-        return np.ones(d, dtype=np.uint64)*_max_hash
- 
+        return np.ones(d, dtype=np.uint64)*_max_hash # 初始化为最大哈希值
+    
+    # 解析哈希值
+    # @param hashvalues: 哈希值
+    # @return: 解析后的哈希值
     def _parse_hashvalues(self, hashvalues):
-        return np.array(hashvalues, dtype=np.uint64)
- 
+        return np.array(hashvalues, dtype=np.uint64) # 解析为无符号64位整数，限制在0到2^64-1之间
+    
+    # 添加哈希值
+    # @param b: 需要添加的哈希值
     def add(self, b):
-        hv = self.hashfunc(b)
-        a, b = self.permutations
-        phv = np.bitwise_and((a * hv + b) % _mersenne_prime, np.uint64(_max_hash))
+        hv = self.hashfunc(b) # 计算哈希值
+        a, b = self.permutations # 取出当前的排列参数
+        phv = np.bitwise_and((a * hv + b) % _mersenne_prime, np.uint64(_max_hash)) # 计算哈希值，通过线性变换和模运算来生成，并限制在0到2^32-1之间
         self.hashvalues = np.minimum(phv, self.hashvalues) #保留所有维度上目前为止的最小哈希值 —— 也就是 MinHash 签名向量
- 
+    
+    # 计算Jaccard相似度
+    # @param other: 另一个MinHash对象
+    # @return: Jaccard相似度
     def jaccard(self, other):
-
+        # 如果种子不同，抛出异常
         if other.seed != self.seed:
             raise ValueError("different seeds")
+        # 如果哈希值不同，抛出异常
         if len(self) != len(other):
             raise ValueError("different numbers of permutation functions")
-        return np.float(np.count_nonzero(self.hashvalues==other.hashvalues)) / np.float(len(self))
-    # 计算MinHash值
+        return np.float64(np.count_nonzero(self.hashvalues==other.hashvalues)) / np.float64(len(self))
+    
+    # 重载len函数，返回哈希值
     def __len__(self):
         return len(self.hashvalues)
     
+    # 重载 ==，判断两个MinHash对象是否相等
     def __eq__(self, other):
         return type(self) is type(other) and  self.seed == other.seed and np.array_equal(self.hashvalues, other.hashvalues)
+    
