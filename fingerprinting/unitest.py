@@ -1,12 +1,14 @@
 # test_minhash.py
 import unittest
 import numpy as np
-from minhash import MinHash, sha1_hash32
-
 import hashlib 
 import struct
+
+from minhash import MinHash
+import my_hash as mh
+
 def test_sha1_hash32(data):
-    data = bytearray(data, 'utf-8')
+    data = bytearray(data, 'utf-8') # 将输入数据转换为字节列表
     return struct.unpack('<I', hashlib.sha1(data).digest()[:4])[0]
 
 class TestMinHash(unittest.TestCase):
@@ -20,11 +22,11 @@ class TestMinHash(unittest.TestCase):
     # 测试SHA-1哈希函数
     def test_sha1_hash32(self):
         # 已知测试用例（验证来源：python hashlib）
-        self.assertEqual(sha1_hash32("hello"), test_sha1_hash32("hello"))
-        self.assertEqual(sha1_hash32("minhash"), test_sha1_hash32("minhash"))
-        self.assertEqual(sha1_hash32("test"), test_sha1_hash32("test"))
+        self.assertEqual(mh.sha1_hash32("hello"), test_sha1_hash32("hello"))
+        self.assertEqual(mh.sha1_hash32("minhash"), test_sha1_hash32("minhash"))
+        self.assertEqual(mh.sha1_hash32("test"), test_sha1_hash32("test"))
         # 空字符串
-        self.assertEqual(sha1_hash32(""), test_sha1_hash32(""))
+        self.assertEqual(mh.sha1_hash32(""), test_sha1_hash32(""))
 
     # 测试MinHash初始化
     def test_initialization(self):
@@ -112,8 +114,8 @@ class TestMinHash(unittest.TestCase):
         self.assertEqual(m1.jaccard(m2), 1.0)  # 所有哈希值初始化为MAX，所以相等
 
         # 单个元素的最小值
-        m = MinHash(d=1, hashvalues = [sha1_hash32("test")])
-        self.assertEqual(m.hashvalues, sha1_hash32("test"))
+        m = MinHash(d=1, hashvalues = [mh.sha1_hash32("test")])
+        self.assertEqual(m.hashvalues[0], mh.sha1_hash32("test"))
 
 if __name__ == '__main__':
     unittest.main()
