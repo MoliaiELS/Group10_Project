@@ -208,10 +208,8 @@ Distributed under the project_license. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 ## Contact
-
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+For any questions or feedback, feel free to reach out:
+- **GitHub Repository**: [Group10_Project](https://github.com/MoliaiELS/Group10_Project)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -220,10 +218,12 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* [Keyu HU](https://github.com/XXX616519): Implemented the Loc-Salityensitive Hashing (LSH) algorithm. [LSH part](https://github.com/MoliaiELS/Group10_Project/tree/main/lsh) 
+* [Ocean Kun Hei OU](https://github.com/oukunhei): Responsible for data preprocessing and cleaning. [preprocessing part](https://github.com/MoliaiELS/Group10_Project/tree/main/preprocessing)
+* [Jingyang YI](): Designed and implemented the evaluation metrics. [evaluation part](https://github.com/MoliaiELS/Group10_Project/tree/main/evaluation)
+* [Ye GUO](https://github.com/MoliaiELS): Developed the fingerprinting module. [fingerprinting part](https://github.com/MoliaiELS/Group10_Project/tree/main/fingerprinting)
 
+We appreciate everyone's contributions! 🙌
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
