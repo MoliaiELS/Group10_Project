@@ -58,6 +58,5 @@ if __name__ == "__main__":
         }
     ]
 
-    # 运行测试
     for config in test_configs:
         run_simple_test(config["hash_method"], config["params"], docs)
