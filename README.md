@@ -91,8 +91,8 @@ GROUP10_PROJECT\
 │   ├── simhash.py       \# SimHash实现\
 │   └── bitsample.py     \# Bit Sampling实现\
 ├── lsh/\
-│   ├── example.py     \# LSH分桶策略\
-│   └── lsh.py\
+│   ├── example.py     
+│   └── lsh.py         \# LSH\
 ├── evaluation/\
 │   ├── metrics.py       \# 重复率计算\
 │   └── visualization.py \# 结果可视化\
