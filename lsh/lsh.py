@@ -160,9 +160,10 @@ class LSHCache:
         dups = []
         if simhash:  # 仅对 Simhash 和 BitSampling 使用汉明距离阈值
             for cand_id in candidates:
-                cand_doc = docs[cand_id] 
+                cand_doc = docs[cand_id]
                 cand_simhash = Simhash(cand_doc.split(), f=self._f)
-                if simhash.hamming_distance(cand_simhash) < 10:  # 自定义阈值
+                hamming_threshold = 3
+                if simhash.hamming_distance(cand_simhash) <= hamming_threshold:  # 自定义阈值
                     dups.append(cand_id)
         else:  # MinHash 使用默认桶匹配
             dups = self.prepare_dup_buckets(self.get_dup_buckets(doc), id)
