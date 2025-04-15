@@ -1,3 +1,4 @@
+#data preprocesing for minhash
 import pandas as pd
 import re
 from sklearn.feature_extraction.text import HashingVectorizer
