@@ -1,7 +1,8 @@
 import sys
 import os
-print("当前文件路径:", __file__)
-sys.path.append("D:\\360MoveData\\Users\\DFVJGJ\\Desktop\\course materal\\Discrete Mathematics\\Group10_Project-main")
+
+# 添加上级目录到 sys.path
+sys.path.insert(0, os.path.abspath('../..'))
 import kgrams
 from fingerprinting import minhash
 from lsh import lsh
