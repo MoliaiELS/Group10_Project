@@ -91,8 +91,8 @@ GROUP10_PROJECT\
 │   ├── simhash.py       \# SimHash实现\
 │   └── bitsample.py     \# Bit Sampling实现\
 ├── lsh/\
-│   ├── bucketing.py     \# LSH分桶策略\
-│   └── candidate_pairs.py\
+│   ├── example.py     \# LSH分桶策略\
+│   └── lsh.py\
 ├── evaluation/\
 │   ├── metrics.py       \# 重复率计算\
 │   └── visualization.py \# 结果可视化\
@@ -268,6 +268,105 @@ except ValueError as e:
 
 All examples are directly executable and demonstrate core functionalities of each algorithm.
 ### **lsh**
+#### 1. **Initializing the `LSHCache`**
+To use the `LSHCache`, you need to initialize it with specific parameters. The initialization process involves setting up various configurations such as the hashing method, the number of bands, rows per band, and shingles.
+
+```python
+from lshcache import LSHCache
+
+# Initialize LSHCache with MinHash as the hashing method
+lsh_cache = LSHCache(n=100, b=20, r=5, max_shingle=3, hash_method='minhash')
+```
+
+##### Explanation of Parameters:
+- **`n=100`**: The **signature length** for MinHash, which determines the size of the hash signatures that represent each document. This will be the total length of the MinHash signature.
+- **`b=20`**: The **number of bands** for Locality Sensitive Hashing (LSH). This refers to how the signature is divided into smaller groups (bands) during the hashing process. More bands improve the ability to detect duplicates but also increase memory usage.
+- **`r=5`**: The **number of rows per band**. Each band consists of `r` rows. In the case of MinHash, this means that the hash signature is divided into `b` bands, with each band containing `r` rows.
+- **`max_shingle=3`**: This specifies the **maximum length of shingles** (substrings) used to generate the document signature. A shingle is a contiguous sequence of characters in the document, and this parameter controls the size of those sequences.
+- **`hash_method='minhash'`**: The **hashing technique** used to generate the signatures. Options are:
+  - **`minhash`**: Uses MinHash to generate a signature for each document.
+  - **`simhash`**: Uses SimHash for generating document signatures.
+  - **`bitsampling`**: Uses BitSampling hashing to generate document signatures.
+
+---
+
+#### 2. **Inserting Documents into the Cache**
+After initializing the `LSHCache`, you can insert documents into the cache by calling the `insert` method. This method calculates the LSH signature for the document and stores it in the cache for future duplicate detection.
+
+```python
+# Insert a document into the LSHCache
+doc = "Natural language processing is a key field in artificial intelligence."
+doc_id = 1
+lsh_cache.insert(doc, doc_id)
+```
+
+##### Explanation:
+- **`doc`**: The document to insert into the cache. It can be any string, representing the content of the document.
+- **`doc_id`**: A **unique identifier** for the document. This ID will help in referencing the document when searching for duplicates or performing other operations.
+- The method calculates the LSH signature for the document and stores it in the cache.
+
+---
+
+#### 3. **Checking for Duplicate Documents**
+Once documents are inserted into the cache, you can check if a new document is similar to any of the stored documents by using the `get_dups` method. This method finds potential duplicates by comparing the LSH signatures.
+
+```python
+# Check for duplicates of the document with ID 1
+duplicates = lsh_cache.get_dups(doc, doc_id)
+print(duplicates)
+```
+
+##### Explanation:
+- **`doc`**: The document to check for duplicates. This is the new document whose similarity you want to check against the documents in the cache.
+- **`doc_id`**: The **unique identifier** for the document you are checking. This ensures that the document itself is not returned as a duplicate.
+- The method returns a list of **duplicate document IDs** based on the similarity of their LSH signatures.
+
+---
+
+#### 4. **Batch Insertion of Documents**
+The `insert_batch` method allows you to insert multiple documents into the cache at once. It accepts a list of document-ID tuples, and processes all documents in the batch.
+
+```python
+# Insert a batch of documents
+doc_tuples = [(doc1, 1), (doc2, 2), (doc3, 3)]
+batch_duplicates = lsh_cache.insert_batch(doc_tuples)
+```
+
+##### Explanation:
+- **`doc_tuples`**: A list of **tuples**, where each tuple consists of a document and its unique ID.
+- The method inserts all documents from the batch into the cache and returns a dictionary of **duplicate documents** found for each document.
+
+---
+
+#### 5. **Querying for Document Count and Recent Insert Time**
+You can retrieve information about the cache, such as the total number of documents stored and the timestamp of the most recent insert.
+
+```python
+# Get the number of documents stored in the cache
+num_docs = lsh_cache.num_docs()
+print(f"Number of documents: {num_docs}")
+
+# Get the timestamp of the most recent insert
+recent_insert_time = lsh_cache.most_recent_insert()
+print(f"Most recent insert time: {recent_insert_time}")
+```
+
+##### Explanation:
+- **`num_docs()`**: Returns the total **number of documents** currently stored in the cache. This is useful for tracking the size of the cache.
+- **`most_recent_insert()`**: Returns the timestamp of the most recent document insertion. This helps in knowing when the latest document was added.
+
+---
+
+#### Summary of Key Methods and Their Usage:
+
+- **`insert(doc, doc_id)`**: Inserts a document and computes its LSH signature.
+- **`get_dups(doc, doc_id)`**: Checks if the document has duplicates in the cache.
+- **`insert_batch(doc_tuples)`**: Inserts multiple documents in batch and checks for duplicates.
+- **`num_docs()`**: Retrieves the total number of documents stored in the cache.
+- **`most_recent_insert()`**: Retrieves the timestamp of the most recent insert.
+
+There is a more detailed example in /lsh/example.py. You can visit this for better understanding.
+
 ### **evaluation**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
