@@ -1,4 +1,4 @@
-#data preprocesing for minhash
+#data preprocesing for minhash using n-grams
 import pandas as pd
 import re
 from sklearn.feature_extraction.text import HashingVectorizer
