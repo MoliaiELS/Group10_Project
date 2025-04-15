@@ -28,7 +28,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/MoliaiELS/Group10_Project">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="logo.webp" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">2106 Group 10</h3>
@@ -172,10 +172,10 @@ If no errors occur, the environment setup is complete.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+### **preprocessing**
+### **fingerprinting**
+### **lsh**
+### **evaluation**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
