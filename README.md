@@ -174,6 +174,99 @@ If no errors occur, the environment setup is complete.
 ## Usage
 ### **preprocessing**
 ### **fingerprinting**
+#### quick verification
+For quick verification, you can directly run and view files in the UnitTest folder
+Here are the English version usage examples for the three hash implementations:
+
+---
+
+#### **1. SimHash Usage Example**
+```python
+from simhash import Simhash
+
+# Example 1: Generate fingerprints from text
+text1 = "Natural language processing is a key field in artificial intelligence"
+text2 = "Natural language processing belongs to critical areas of AI"
+hash1 = Simhash(text1, f=64)
+hash2 = Simhash(text2, f=64)
+
+print(f"Fingerprint of text1 (hex): {hash1.hex}")
+print(f"Hamming distance: {hash1.hamming_distance(hash2)}")
+print(f"Similarity: {hash1.similarity(hash2):.2f}")
+
+# Example 2: Generate fingerprints from feature list
+features = [("apple", 3), ("banana", 2), ("orange", 5)]
+hash3 = Simhash(features, f=64)
+print(f"Feature list fingerprint: {hash3.hex}")
+```
+
+---
+
+#### **2. BitSamplingHash Usage Example**
+```python
+from bitsampling import BitSamplingHash
+from simhash import Simhash
+
+# Generate two Simhash fingerprints
+text1 = "The quick brown fox jumps over the lazy dog"
+text2 = "The fast brown fox jumps over the lazy dog"
+simhash1 = Simhash(text1, f=64)
+simhash2 = Simhash(text2, f=64)
+
+# Initialize bit sampler (randomly selects 8 bits from 64)
+sampler = BitSamplingHash(num_bits=64, sample_size=8, seed=42)
+
+# Sample fingerprints
+bits1 = sampler.hash(simhash1.fingerprint)
+bits2 = sampler.hash(simhash2.fingerprint)
+
+print(f"Sampled bit indices: {sampler.selected_bits}")
+print(f"Sampled bits 1: {bits1}")
+print(f"Sampled bits 2: {bits2}")
+print(f"Post-sampling similarity: {sampler.similarity(bits1, bits2):.2f}")
+```
+
+---
+
+#### **3. MinHash Usage Example**
+```python
+from minhash import MinHash
+
+# Initialize two MinHash objects (must use same seed)
+minhash1 = MinHash(d=128, seed=42)
+minhash2 = MinHash(d=128, seed=42)
+
+# Add elements to MinHash
+data1 = ["apple", "banana", "orange", "grape"]
+data2 = ["apple", "banana", "pear", "mango"]
+
+for word in data1:
+    minhash1.add(word)
+for word in data2:
+    minhash2.add(word)
+
+# Calculate Jaccard similarity
+similarity = minhash1.jaccard(minhash2)
+print(f"Set similarity: {similarity:.2f}")
+
+# Error example: Different seeds will raise error
+try:
+    minhash3 = MinHash(seed=123)
+    minhash1.jaccard(minhash3)
+except ValueError as e:
+    print(f"Error caught: {e}")
+```
+
+---
+
+#### **Key Features**
+| Algorithm       | Core Purpose                      | Typical Use Cases           |
+|-----------------|-----------------------------------|-----------------------------|
+| **SimHash**     | Text fingerprinting & similarity | Duplicate detection, Plagiarism check |
+| **BitSampling** | Dimensionality reduction for fast approximate matching | Large-scale fingerprint pre-screening |
+| **MinHash**     | Set similarity estimation (Jaccard index) | Recommendation systems, Document similarity |
+
+All examples are directly executable and demonstrate core functionalities of each algorithm.
 ### **lsh**
 ### **evaluation**
 
