@@ -192,8 +192,8 @@ train_features, valid_features = preprocessor.preprocess('train.parquet', 'valid
 ```
 ---
 #### **Parameters in TextPreprocessor Class**
--**`n_features=2**20`**: This parameter sets the number of features for the HashingVectorizer. A larger number of features allows for capturing more nuances in the data, but it also increases computational complexity and memory usage.
--**`ngram_range=(3, 5)`**: This parameter specifies the range of n-grams to consider during feature extraction. Here, n-grams of size 3 to 5 characters are used. This means that sequences of 3, 4, and 5 characters are extracted from the text for feature representation. Character-level n-grams are particularly useful for capturing patterns in texts where spelling variations or typos might occur.
+- **`n_features=2**20`**: This parameter sets the number of features for the HashingVectorizer. A larger number of features allows for capturing more nuances in the data, but it also increases computational complexity and memory usage.
+- **`ngram_range=(3, 5)`**: This parameter specifies the range of n-grams to consider during feature extraction. Here, n-grams of size 3 to 5 characters are used. This means that sequences of 3, 4, and 5 characters are extracted from the text for feature representation. Character-level n-grams are particularly useful for capturing patterns in texts where spelling variations or typos might occur.
 
 
 ### **fingerprinting**
