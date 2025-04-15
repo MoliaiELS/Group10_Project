@@ -180,7 +180,7 @@ Before using this code, make sure to add the files that need deduplication to th
 
 ```python
 from preprocessor import Simhash
-preprocessor = TextPreprocessor()
+preprocessor = TextPreprocessor(n_features=2**20, ngram_range=(3, 5))
 preprocessor.load_data('test.parquet', 'valid.parquet')
 preprocessor.apply_cleaning()
 train_features, valid_features = preprocessor.feature_extraction()
@@ -191,6 +191,10 @@ train_token_freqs, valid_token_freqs = preprocessor.get_simhash_inputs()
 train_features, valid_features = preprocessor.preprocess('train.parquet', 'valid.parquet')
 ```
 ---
+#### **Parameters in TextPreprocessor Class**
+-**`n_features=2**20`**: This parameter sets the number of features for the HashingVectorizer. A larger number of features allows for capturing more nuances in the data, but it also increases computational complexity and memory usage.
+-**`ngram_range=(3, 5)`**: This parameter specifies the range of n-grams to consider during feature extraction. Here, n-grams of size 3 to 5 characters are used. This means that sequences of 3, 4, and 5 characters are extracted from the text for feature representation. Character-level n-grams are particularly useful for capturing patterns in texts where spelling variations or typos might occur.
+
 
 ### **fingerprinting**
 #### quick verification
