@@ -173,15 +173,15 @@ If no errors occur, the environment setup is complete.
 <!-- USAGE EXAMPLES -->
 ## Usage
 ### **preprocessing**
-
-Here are the English version usage examples for the preprocessor:
+Here are the usage examples for the data preprocessor:
+Before using this code, make sure to add the files that need deduplication to the current directory.
 
 ---
 
 ```python
 from preprocessor import Simhash
 preprocessor = TextPreprocessor()
-preprocessor.load_data('train.parquet', 'valid.parquet')
+preprocessor.load_data('test.parquet', 'valid.parquet')
 preprocessor.apply_cleaning()
 train_features, valid_features = preprocessor.feature_extraction()
 #dataset used for minhash
