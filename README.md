@@ -173,6 +173,25 @@ If no errors occur, the environment setup is complete.
 <!-- USAGE EXAMPLES -->
 ## Usage
 ### **preprocessing**
+
+Here are the English version usage examples for the preprocessor:
+
+---
+
+```python
+from preprocessor import Simhash
+preprocessor = TextPreprocessor()
+preprocessor.load_data('train.parquet', 'valid.parquet')
+preprocessor.apply_cleaning()
+train_features, valid_features = preprocessor.feature_extraction()
+#dataset used for minhash
+train_ngrams, valid_ngrams = preprocessor.get_ngrams_for_minhash()
+#dataset used for simhash
+train_token_freqs, valid_token_freqs = preprocessor.get_simhash_inputs()
+train_features, valid_features = preprocessor.preprocess('train.parquet', 'valid.parquet')
+```
+---
+
 ### **fingerprinting**
 #### quick verification
 For quick verification, you can directly run and view files in the UnitTest folder
