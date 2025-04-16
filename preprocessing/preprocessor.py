@@ -9,8 +9,8 @@ class TextPreprocessor:
 
     def load_data(self, train_path, valid_path):
         """Load the parquet files."""
-        self.train_df = pd.read_parquet(train_path)
-        self.valid_df = pd.read_parquet(valid_path)
+        self.train_df = pd.read_parquet(train_path, engine='pyarrow')
+        self.valid_df = pd.read_parquet(valid_path, engine='pyarrow')
 
     def clean_text(self, text):
         """Clean the text data."""
