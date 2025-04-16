@@ -6,6 +6,8 @@ class TextPreprocessor:
     def __init__(self, n_features=2**20, ngram_range=(1, 1)):
         self.n_features = n_features  # 默认使用2^20个特征
         self.ngram_range = ngram_range  # 控制n-grams的范围
+        self.train_df=None
+        self.valid_df=None
 
     def load_data(self, train_path, valid_path):
         """Load the parquet files."""
@@ -15,7 +17,7 @@ class TextPreprocessor:
     def clean_text(self, text):
         """Clean the text data."""
         text = re.sub(r'<[^>]+>', '', text)  # Remove HTML tags
-        text = re.sub(r'[^a-zA-Z\s]', '', text)  # Remove non-alphabetic characters
+        #text = re.sub(r'[^a-zA-Z\s]', '', text)  # Remove non-alphabetic characters
         text = re.sub(r'\s+', ' ', text).strip().lower()  # Normalize spaces and case
         return text
 
