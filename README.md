@@ -174,14 +174,14 @@ If no errors occur, the environment setup is complete.
 ## Usage
 ### **preprocessing**
 Here are the usage examples for the data preprocessor:
-Before using this code, make sure to add the files that need deduplication to the current directory.
+- Before using this code, make sure to add the files that need deduplication to the current directory.
 
 ---
 
 ```python
-from preprocessor import Simhash
+from preprocessor import TextPreprocessor:
 preprocessor = TextPreprocessor(n_features=2**20, ngram_range=(3, 5))
-preprocessor.load_data('test.parquet', 'valid.parquet')
+preprocessor.load_data('test.parquet', 'valid.parquet') #change it to your file path
 preprocessor.apply_cleaning()
 train_features, valid_features = preprocessor.feature_extraction()
 #dataset used for minhash
