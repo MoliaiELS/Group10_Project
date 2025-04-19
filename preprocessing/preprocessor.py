@@ -7,29 +7,39 @@ class TextPreprocessor:
         self.n_features = n_features  # 默认使用2^20个特征
         self.ngram_range = ngram_range  # 控制n-grams的范围
         self.train_df=None
-        self.valid_df=None
+        self.vald_df=None
 
     def load_data(self, train_path, valid_path):
         """Load the parquet files."""
+        # 使用 iterator 分块读取大数据
         self.train_df = pd.read_parquet(train_path, engine='pyarrow')
         self.valid_df = pd.read_parquet(valid_path, engine='pyarrow')
 
     def clean_text(self, text):
         """Clean the text data."""
         text = re.sub(r'<[^>]+>', '', text)  # Remove HTML tags
-        #text = re.sub(r'[^a-zA-Z\s]', '', text)  # Remove non-alphabetic characters
+        text = re.sub(r'[^a-zA-Z\s]', '', text)  # Remove non-alphabetic characters
         text = re.sub(r'\s+', ' ', text).strip().lower()  # Normalize spaces and case
         return text
-
+       
     def apply_cleaning(self):
-        """Apply cleaning to the text data."""
-        self.train_df['cleaned_text'] = self.train_df['text'].apply(self.clean_text)
-        self.valid_df['cleaned_text'] = self.valid_df['text'].apply(self.clean_text)
+    #原地修改，减少临时对象
+        for df in [self.train_df, self.valid_df]:
+            df['cleaned_text'] = df['text'].map(self.clean_text, na_action='ignore')
 
     def generate_character_ngrams(self, text, k=5):
-        """Generate character-level k-grams for MinHash."""
+    #生成器模式返回 n-grams，避免列表存储
         text = f"^{text}$"
-        return [text[i:i+k] for i in range(len(text)-k+1)]
+        for i in range(len(text) - k + 1):
+            yield text[i:i+k]  # 或 yield hash(text[i:i+k])  # 直接生成哈希值节省内存  
+
+    def get_ngrams_for_minhash(self, k=5):
+        """分批处理 + 生成器"""
+        train_ngrams = self.train_df['cleaned_text'].map(
+            lambda x: {ngram for ngram in self.generate_character_ngrams(x, k)})
+        valid_ngrams = self.valid_df['cleaned_text'].map(
+            lambda x: {ngram for ngram in self.generate_character_ngrams(x, k)})
+        return train_ngrams, valid_ngrams
 
     def tokenize_text_for_simhash(self, text):
         """Tokenize text into words for SimHash (can be customized for specific needs)."""
@@ -45,7 +55,7 @@ class TextPreprocessor:
         return freq_dict
 
     def get_simhash_inputs(self):
-        """Generate token frequency dictionaries for all documents (for SimHash)."""
+        """Generate token frequency dictionaries for all documents (for SimHash)."""    
         train_token_freqs = self.train_df['cleaned_text'].apply(self.get_token_frequency_dict)
         valid_token_freqs = self.valid_df['cleaned_text'].apply(self.get_token_frequency_dict)
         return train_token_freqs, valid_token_freqs
@@ -60,14 +70,6 @@ class TextPreprocessor:
         self.train_features = vectorizer.fit_transform(self.train_df['cleaned_text'])
         self.valid_features = vectorizer.transform(self.valid_df['cleaned_text'])
         return self.train_features, self.valid_features
-
-    def get_ngrams_for_minhash(self, k=5):
-        """Generate k-grams sets for MinHash processing."""
-        train_ngrams = self.train_df['cleaned_text'].apply(
-            lambda x: set(self.generate_character_ngrams(x, k)))
-        valid_ngrams = self.valid_df['cleaned_text'].apply(
-            lambda x: set(self.generate_character_ngrams(x, k)))
-        return train_ngrams, valid_ngrams
 
     def preprocess(self, train_path, valid_path):
         """Run the complete preprocessing pipeline."""
