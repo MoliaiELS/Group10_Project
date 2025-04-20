@@ -388,6 +388,105 @@ print(f"Most recent insert time: {recent_insert_time}")
 - **`most_recent_insert()`**: Retrieves the timestamp of the most recent insert.
 
 There is a more detailed example in /lsh/example.py. You can visit this for better understanding.
+### **evaluation**
+#### environment 
+`pip install pandas numpy matplotlib seaborn pyarrow psutil `
+#### evaluation2.py：check duplicate within one file
+#### evaluation3.py：check duplicate between file
+
+#### parameters and their effects
+
+```
+{
+    "hash_method": "minhash",
+    "params": {
+        "n": 80,           # length of fingerprint
+        "b": 8,            # band num
+        "r": 10,           # The number of rows per band
+        "max_shingle": 3   # n-gram
+    }
+}
+{
+    "hash_method": "simhash",
+    "params": {
+        "b": 4,            # band num
+        "r": 32,           # The number of rows per band
+        "max_shingle": 4,  # n-gram
+        "f": 128           # length of fingerprint
+    }
+}
+{
+    "hash_method": "bitsampling",
+    "params": {
+        "b": 4,            #  Number of samplers
+        "r": 32,           #  Number of samplers bits 
+        "max_shingle": 4,  # n-gram
+        "f": 128          #  Feature vector length
+    }
+}
+```
+#### MinHash
+- n: Signature length. Positively correlated with accuracy and computational cost.
+- b: Smaller values make the judgment stricter.
+- r: Larger values make the judgment stricter.
+- Shingle length: Longer lengths correspond to longer phrase relationships and make it stricter.
+
+**n = b * r**
+
+#### SimHash
+- b: Larger values make it stricter.
+- r: Larger values make it stricter.
+- Shingle length: Larger values make it stricter.
+
+**r has an exponential impact on memory. The time complexity is f. f = b * r**
+
+#### BitSampling
+- b: Number of samplers. Larger values lead to higher precision.
+- r: Length of the sampler. Larger values make it stricter.
+- f: Fingerprint length, feature vector length
+
+**f = b * r** 
+
+#### output example 
+##### within one file 
+```
+orig index: [0]
+  dup index: [0]
+orig index:[1463]
+  dupindex::[1462]
+orig index:[3425]
+  dupindex:[2432]
+  dup index:[2432]
+  dup index:[3425]
+..............
+=== Statistical Information ===
+Total number of documents: 81798
+Number of duplicate documents: 283
+Number of unique documents: 81515
+Number of duplicate document pairs: 179
+Duplication rate: 0.35%
+Current memory usage: 6918.58 MB
+```
+##### between files 
+
+```
+=== Testing MINHASH ===
+Number of documents in Database 1: 81137
+Number of documents in Database 2: 81799
+Number of duplicate records between databases: 992
+Duplication rate: 1.21%
+Current memory usage: 6489.69 MB
+Top 10 duplicate records between databases:
+set2_0 -> ['set1_123','set1_456'] 
+```
+
+
+
+
+
+
+
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
