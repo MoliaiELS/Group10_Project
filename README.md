@@ -82,7 +82,6 @@
 GROUP10_PROJECT\
 ├── README.md            \# 安装与运行说明\
 ├── requirements.txt     \# 依赖库\
-├── main.py              \# 主入口文件（新增）\
 ├── preprocessing/\
 │   ├── text_cleaner.py  \# 文本清洗\
 │   └── vectorizer.py    \# 特征向量化\
@@ -95,7 +94,7 @@ GROUP10_PROJECT\
 │   └── lsh.py         \# LSH\
 ├── evaluation/\
 │   ├── metrics.py       \# 重复率计算\
-│   └── visualization.py \# 结果可视化\
+│   └── visualization.py \# 结果可视化
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -390,7 +389,6 @@ print(f"Most recent insert time: {recent_insert_time}")
 
 There is a more detailed example in /lsh/example.py. You can visit this for better understanding.
 
-### **evaluation**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -412,7 +410,7 @@ Don't forget to give the project a star! Thanks again!
 
 ### Top contributors:
 
-<a href="https://github.com/github_username/repo_name/graphs/contributors">
+<a href="https://github.com/MoliaiELS/Group10_Project/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=github_username/repo_name" alt="contrib.rocks image" />
 </a>
 
@@ -441,7 +439,7 @@ For any questions or feedback, feel free to reach out:
 
 * [Keyu HU](https://github.com/XXX616519): Implemented the Loc-Salityensitive Hashing (LSH) algorithm. [LSH part](https://github.com/MoliaiELS/Group10_Project/tree/main/lsh) 
 * [Ocean Kun Hei OU](https://github.com/oukunhei): Responsible for data preprocessing and cleaning. [preprocessing part](https://github.com/MoliaiELS/Group10_Project/tree/main/preprocessing)
-* [Jingyang YI](): Designed and implemented the evaluation metrics. [evaluation part](https://github.com/MoliaiELS/Group10_Project/tree/main/evaluation)
+* [Jingyang YI](https://github.com/jyi664): Designed and implemented the evaluation metrics. [evaluation part](https://github.com/MoliaiELS/Group10_Project/tree/main/evaluation)
 * [Ye GUO](https://github.com/MoliaiELS): Developed the fingerprinting module. [fingerprinting part](https://github.com/MoliaiELS/Group10_Project/tree/main/fingerprinting)
 
 We appreciate everyone's contributions! 🙌
