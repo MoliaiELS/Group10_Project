@@ -21,7 +21,7 @@ def detect_cross_duplicates(train_path, valid_path, n_features=2**20, ngram_rang
     preprocessor = TextPreprocessor(n_features=n_features, ngram_range=ngram_range)
     preprocessor.load_data(train_path, valid_path)
     preprocessor.apply_cleaning()
-    train_token_freqs, valid_token_freqs = preprocessor.get_simhash_inputs()
+    train_token_freqs, valid_token_freqs = preprocessor.get_minhash_inputs()
     print("文件预处理完毕")
 
     #测试模式下运行前100个文档
@@ -29,7 +29,7 @@ def detect_cross_duplicates(train_path, valid_path, n_features=2**20, ngram_rang
     #valid_token_freqs = valid_token_freqs[:100]
     
     # 2. 初始化LSH缓存
-    lsh_cache = LSHCache(n=n, b=b, r=r, max_shingle=max_shingle, hash_method='simhash')
+    lsh_cache = LSHCache(n=n, b=b, r=r, max_shingle=max_shingle, hash_method='minhash')
     
     # 3. 插入训练集（直接迭代Series）
     train_ids = []
